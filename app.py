@@ -21,7 +21,7 @@ def convert_to_html(md):
 def convert_to_javascript(md):
     document_format = "document.write('%s')"
     html = convert_to_html(md)
-    return document_format % html.replace("'", "\\'").replace("\n", "")
+    return document_format % html.replace("'", "\\'").replace("\n", "\\n")
 
 
 class MarkdownHandler(tornado.web.RequestHandler):
