@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from tornado.httpclient import AsyncHTTPClient
+import argparse
 import markdown
-import sys
 import tornado.ioloop
 import tornado.web
 
@@ -67,11 +67,17 @@ class JavascriptHandler(tornado.web.RequestHandler):
 
 
 if __name__ == '__main__':
-    assert (len(sys.argv) == 2)
-    args = dict(target=sys.argv[1])
+    description = ("Parsing markdown from github"
+                   "and making javascript for embedding.")
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--port', help='port number', default=8888, type=int, dest='port')
+    parser.add_argument('target')
+
+    args = parser.parse_args()
+    app_config= dict(target=args.target)
     Application = tornado.web.Application
-    application = Application([(r"/(.*)\.html", HTMLHandler, args),
-                               (r"/(.*)\.js", JavascriptHandler, args),
-                               (r"/(.*)\.md", MarkdownHandler, args)])
-    application.listen(8888)
+    application = Application([(r"/(.*)\.html", HTMLHandler, app_config),
+                               (r"/(.*)\.js", JavascriptHandler, app_config),
+                               (r"/(.*)\.md", MarkdownHandler, app_config)])
+    application.listen(args.port)
     tornado.ioloop.IOLoop.instance().start()
