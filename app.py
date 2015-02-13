@@ -70,11 +70,12 @@ if __name__ == '__main__':
     description = ("Parsing markdown from github"
                    "and making javascript for embedding.")
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--port', help='port number', default=8888, type=int, dest='port')
+    parser.add_argument('--port', help='port number', default=8888, type=int,
+                        dest='port')
     parser.add_argument('target')
 
     args = parser.parse_args()
-    app_config= dict(target=args.target)
+    app_config = dict(target=args.target)
     Application = tornado.web.Application
     application = Application([(r"/(.*)\.html", HTMLHandler, app_config),
                                (r"/(.*)\.js", JavascriptHandler, app_config),
